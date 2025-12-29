@@ -164,6 +164,10 @@ public void place(@LockKeyParam("userId") OrderRequest req,
 - 坐标
   - `io.github.helloworldtang:lock-key-param:0.1.0`
   - `io.github.helloworldtang:distributed-lock-redis-spring:0.1.0`
+  - 已发布版本：0.1.0
+    - Central 页面：
+      - https://central.sonatype.com/artifact/io.github.helloworldtang/lock-key-param/0.1.0
+      - https://central.sonatype.com/artifact/io.github.helloworldtang/distributed-lock-redis-spring/0.1.0
 - 单包同时支持 Boot 2/3
   - 同时提供 `spring.factories`（Boot 2）与 `AutoConfiguration.imports`（Boot 3），无需分别发布两个包
   - 自动配置类使用条件注入；核心依赖（Spring Boot/Data Redis）在库内均为 `provided`，不会强制传递到业务侧

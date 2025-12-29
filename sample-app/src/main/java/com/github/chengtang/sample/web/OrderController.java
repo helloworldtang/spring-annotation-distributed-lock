@@ -16,5 +16,14 @@ public class OrderController {
     public int place(@RequestBody OrderRequest req) {
         return service.place(req, req.getOrderId());
     }
-}
 
+    @PostMapping("/orders/place-wait")
+    public int placeWait(@RequestBody OrderRequest req) {
+        return service.placeWait(req, req.getOrderId());
+    }
+
+    @PostMapping("/orders/place-wait-linear")
+    public int placeWaitLinear(@RequestBody OrderRequest req) {
+        return service.placeWaitLinear(req, req.getOrderId());
+    }
+}

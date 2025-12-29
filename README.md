@@ -2,6 +2,47 @@
 
 基于 Spring 生态与 Redis 的声明式分布式锁组件，支持通过方法注解进行加锁，锁 key 可由 SpringEL 与 @LockKeyParam 共同组成（union all）。
 
+## 最新版本与依赖
+
+- 最新版本：0.1.0
+- Maven
+
+```xml
+<dependency>
+  <groupId>io.github.helloworldtang</groupId>
+  <artifactId>lock-key-param</artifactId>
+  <version>0.1.0</version>
+</dependency>
+<dependency>
+  <groupId>io.github.helloworldtang</groupId>
+  <artifactId>distributed-lock-redis-spring</artifactId>
+  <version>0.1.0</version>
+</dependency>
+```
+
+- Gradle（Groovy）
+
+```groovy
+dependencies {
+  implementation 'io.github.helloworldtang:lock-key-param:0.1.0'
+  implementation 'io.github.helloworldtang:distributed-lock-redis-spring:0.1.0'
+}
+```
+
+- Gradle（Kotlin）
+
+```kotlin
+dependencies {
+  implementation("io.github.helloworldtang:lock-key-param:0.1.0")
+  implementation("io.github.helloworldtang:distributed-lock-redis-spring:0.1.0")
+}
+```
+
+- 使用方式简述
+  - 添加以上依赖，配置 spring.data.redis.host/port
+  - 无需 @Enable\*，自动装配即生效
+  - 在方法上使用 @Lock，并在参数/DTO 字段上标注 @LockKeyParam
+
 ## 特性
 
 - 方法级声明式分布式锁（@Lock）

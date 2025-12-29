@@ -1,6 +1,6 @@
 # Spring Annotation Distributed Lock
 
-基于 Spring 生态与 Redis 的声明式分布式锁组件，支持通过方法注解进行加锁，锁 key 可由 SpringEL 与 @LockKeyParam 共同组成（union all）。
+基于 Spring 生态与 Redis 的[声明式分布式锁组件](https://mp.weixin.qq.com/s/wUWZHqU_JIhh30k-Z22NSw)，支持通过方法注解进行加锁，锁 key 可由 SpringEL 与 @LockKeyParam 共同组成（union all）。
 
 ## 最新版本与依赖
 

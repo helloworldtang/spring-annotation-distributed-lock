@@ -224,3 +224,67 @@ public void place(@LockKeyParam("userId") OrderRequest req,
   - 作用：经典 OSSRH 发布流程（sources/javadocs/GPG/Nexus Staging）
   - 使用：`mvn -Prelease -DskipTests deploy`
   - Central Portal 发布（免 GPG）不需要该 profile，可保留作为回退方案
+
+## Maven Central 发布 SOP
+
+- 前置准备
+  - 命名空间验证：在 Central Portal 验证 io.github.helloworldtang，并确保父 POM 的 <groupId> 与之完全一致
+  - POM 元数据完整：name、description、url、licenses、developers、scm、issueManagement、organization
+  - 仅发布库模块：示例模块 sample-app 已配置不部署
+- 本机配置
+  - 安装 GPG（macOS）
+
+```bash
+brew install gnupg
+```
+
+- 生成密钥并（可选）上传到 keyserver
+
+```bash
+gpg --full-generate-key    # 选择 RSA 4096 / 不过期
+gpg --list-keys --with-colons --keyid-format LONG 793059909@qq.com | awk -F: '/^pub/{print $5; exit}'
+gpg --keyserver keyserver.ubuntu.com --send-keys <KEY_ID>
+```
+
+- 在 ~/.m2/settings.xml 或指定 settings.xml 配置 Central 令牌
+
+```xml
+<settings>
+  <servers>
+    <server>
+      <id>central</id>
+      <username><!-- Portal token username --></username>
+      <password><!-- Portal token password --></password>
+    </server>
+  </servers>
+</settings>
+```
+
+- 构建与发布（自动发布）
+  - 父 POM 的 release profile 已集成 central-publishing-maven-plugin，autoPublish=true
+
+```bash
+mvn -s /Users/cheng.tang/workspace/deploy/settings.xml \
+    -Dmaven.repo.local=~/.m2/repository \
+    -Prelease -DskipTests \
+    -pl lock-key-param,distributed-lock-redis-spring -am deploy
+```
+
+- 常见错误与处理
+  - Namespace not allowed：groupId 必须与已验证命名空间一致（io.github.helloworldtang）
+  - Missing signature：安装 gnupg 并确保 maven-gpg-plugin 执行；或切换为 BC signer（需提供密钥与口令）
+  - Could not create local repository：settings.xml 的 <localRepository> 必须为有效路径，或使用 -Dmaven.repo.local 覆盖
+- 验证发布
+
+```bash
+# 立即可用的官方搜索
+open https://search.maven.org/search?q=g:io.github.helloworldtang
+open https://search.maven.org/artifact/io.github.helloworldtang/lock-key-param/0.1.0/jar
+open https://search.maven.org/artifact/io.github.helloworldtang/distributed-lock-redis-spring/0.1.0/jar
+
+# 本地拉取验证
+mvn -U dependency:get -Dartifact=io.github.helloworldtang:lock-key-param:0.1.0
+mvn -U dependency:get -Dartifact=io.github.helloworldtang:distributed-lock-redis-spring:0.1.0
+```
+
+- mvnrepository.com 为第三方聚合站，索引可能延迟；Central Published 后通常几分钟至数小时收录
